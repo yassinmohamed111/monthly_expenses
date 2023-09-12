@@ -90,6 +90,7 @@ def month_income(date):
     return total
     
 
+
 def get_mincome() :
     listt = []
 
@@ -129,7 +130,7 @@ def get_categorypaied():
 
 
 
-print(expenses["Amount"].sum())
+
 
 def getPerc(x):
     return (x / x.sum() )*100
@@ -149,17 +150,65 @@ def category():
     categoryName["min"] = categorymin.values
     categoryName["max"] = categorymax.values
     categoryName["perc%"] = categoryValues.apply(getPerc).values
+    categoryName.sort_values(by="Amount" , ascending=False , inplace=True)
     categoryName.to_csv("test.csv" , index=False)
     test = pd.read_csv("test.csv")
     print(test)
-    
+
+
+test = pd.read_csv("test.csv")
+
+monthss = pd.read_csv("months.csv")
+last = pd.read_csv('monthsandcategory.csv')
+
+def getstat():
+                def getMonths():
+                    listt = []
+                    for i in range(13):
+                     for i,row in monthss.iterrows():
+                        
+                            x =  row["month"]
+                            listt.append(x)
+                    
+                    return listt
+                        
+
+                def getcategories():
+                    listt = []
+                    for i , row in test.iterrows():
+                        for i in range(5):
+                            x = row["Category"]
+                            listt.append(x)
+                    return listt
 
 
 
+                last["Category"] = getcategories()
+                last["months"] = getMonths()  
+
+                def cal_all(category, date):
+                    total = expenses[(expenses["Category"].str.contains(category, case=False)) & (expenses["Date"].str.contains(date, case=False))]
+                    summ = total["Amount"].mean()
+                    return summ 
+                
+                def get_all():
+                    listt = []
+                    for i, row in last.iterrows():
+                        date = row["months"]
+                        category = row["Category"]
+                        total_amount = cal_all(category, date)
+                        listt.append(total_amount)
+                    return listt
+                 
+                def save():
+                    last["TotalAmount"] = get_all() #uncomment
+                    last.fillna(0.0 , inplace=True)
+                    last.to_csv('monthsandcategory.csv' , index=False)
+
+                print(last)
+
+                
+apparel = expenses[expenses["Category"] == "Apparel"]
+print(apparel)
 
 
-
-
-    
-    
-    
