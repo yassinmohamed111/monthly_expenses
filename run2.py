@@ -1,46 +1,34 @@
 import pandas as pd
 
-
-
-expenses = pd.read_csv("expenses.csv")
-stats = pd.read_csv("daysExpenses.csv")
-
-def save():
-    stats.to_csv('daysExpenses.csv' , index=False)
-
 from datetime import datetime
 
+new_expenses = pd.read_csv('expense_data_1.csv')
+expenses = pd.read_csv("new_expenses.csv")
 
+
+
+
+
+
+def convert():
+   # Convert the 'Date' column to datetime format
+    new_expenses['Date'] = pd.to_datetime(new_expenses['Date'])
+    new_expenses['Date'] = new_expenses['Date'].dt.date
+    new_expenses.drop(columns="Subcategory" , inplace=True)
+    new_expenses.drop(columns="Account" , inplace=True)
+    new_expenses.drop(columns="Account1" , inplace=True)
+    new_expenses.drop(columns="Currency" , inplace=True)
+    new_expenses.drop(columns="Note1" , inplace=True)
+    print(new_expenses)
+    new_expenses.to_csv("new_expenses" , index=False)
+    
+
+
+#convert() pre processing and cleaning
+
+#dont uncomment
 '''
-# Convert the 'Date' column to datetime format
-expenses['Date'] = pd.to_datetime(expenses['Date'])
-
-# Extract the month from the 'Date' column
-stats['months'] = expenses['Date'].dt.strftime('%Y-%m')
-stats.to_csv("stats.csv" , index=False)
-# Convert the 'months' column to datetime format
-stats['months'] = pd.to_datetime(stats['months'])
-
-# Format the datetime objects to display the written month names
-stats['months'] = stats['months'].dt.strftime('%B %Y')
-stats["months"].drop_duplicates(inplace=True)
-
-
-stats.drop_duplicates(inplace=True)
-stats.to_csv("stats.csv" , index=False)
-
-
-  months
-  March 2022
-  February 2022
-  December 2021
-  November 2021
-
-  stats["days"].drop_duplicates(inplace=True)
-stats.drop_duplicates(inplace=True)
-stats.to_csv("stats.csv" , index=False)
-'''
-
+stats = pd.read_csv("daysExpenses.csv")
 
 def totalexpenses(date) :
     total = expenses[(expenses["Date"] == date) & (expenses['Income/Expense'] == "Expense")]
@@ -66,7 +54,6 @@ def totalincome(date) :
     #print(f"total payed in {date} = " , finaltot)
     return finaltot
 
-
 def get_income() :
     listt = []
 
@@ -75,6 +62,8 @@ def get_income() :
         total = totalincome(row["days"])
         listt.append(total)
     return listt
+
+
 
 months = pd.read_csv("months.csv")
 
@@ -130,13 +119,14 @@ def get_categorypaied():
 
 
 
-
+'''
 
 def getPerc(x):
     return (x / x.sum() )*100
     
 
 import numpy as np
+#get all categories purchases amount
 def category():
     categoryGroup = expenses.groupby("Category")["Amount"].agg(sum)
     categorymax= expenses.groupby("Category")["Amount"].agg(max)
@@ -151,22 +141,37 @@ def category():
     categoryName["max"] = categorymax.values
     categoryName["perc%"] = categoryValues.apply(getPerc).values
     categoryName.sort_values(by="Amount" , ascending=False , inplace=True)
-    categoryName.to_csv("test.csv" , index=False)
-    test = pd.read_csv("test.csv")
-    print(test)
+    categoryName.to_csv("category.csv" , index=False)
+    test = pd.read_csv("category.csv")
+    return test
 
 
-test = pd.read_csv("test.csv")
+
+
+
+#get months
+def monthsOnly():
+ expenses['Date'] = pd.to_datetime(expenses['Date'])
+ expenses['Month'] = expenses['Date'].dt.strftime('%Y-%m')
+ months = expenses["Month"].drop_duplicates()
+ months.to_csv("months.csv" , index=False)
+
+
+test =category()
 monthss = pd.read_csv("months.csv")
-last = pd.read_csv('monthsandcategory.csv')
+last = pd.read_csv("monthsandcategory.csv")
 
+
+
+
+#get in one csv file all category purchases in each month
 def getstat():
                 def getMonths():
                     listt = []
                     for i in range(13):
                      for i,row in monthss.iterrows():
                         
-                            x =  row["month"]
+                            x =  row["Month"]
                             listt.append(x)
                     
                     return listt
@@ -178,13 +183,18 @@ def getstat():
                         for i in range(5):
                             x = row["Category"]
                             listt.append(x)
-                    return listt
-
-
-
+                    return listt 
+                
                 last["Category"] = getcategories()
-                last["months"] = getMonths()  
+                last["Month"] = getMonths()  
+                last.to_csv('monthsandcategory.csv' , index=False)
+                
+                
+                
 
+                
+                
+            
                 def cal_all(category, date):
                     total = expenses[(expenses["Category"].str.contains(category, case=False)) & (expenses["Date"].str.contains(date, case=False))]
                     summ = total["Amount"].mean()
@@ -193,20 +203,24 @@ def getstat():
                 def get_all():
                     listt = []
                     for i, row in last.iterrows():
-                        date = row["months"]
+                        date = row["Month"]
                         category = row["Category"]
                         total_amount = cal_all(category, date)
                         listt.append(total_amount)
                     return listt
                  
                 def save():
-                    last["TotalAmount"] = get_all() #uncomment
+                    last["average"] = get_all() #uncomment
                     last.fillna(0.0 , inplace=True)
                     last.to_csv('monthsandcategory.csv' , index=False)
 
                 print(last)
+                save()
 
                 
+getstat() #take this csv file to power bi
+
+
 
 
 
