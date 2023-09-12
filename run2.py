@@ -157,7 +157,6 @@ def category():
 
 
 test = pd.read_csv("test.csv")
-
 monthss = pd.read_csv("months.csv")
 last = pd.read_csv('monthsandcategory.csv')
 
@@ -208,7 +207,6 @@ def getstat():
                 print(last)
 
                 
-apparel = expenses[expenses["Category"] == "Apparel"]
-print(apparel)
+
 
 
