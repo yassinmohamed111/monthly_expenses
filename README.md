@@ -1,4 +1,4 @@
-<h2>Monthly expenses analysis & PowerBI visualization : </h2>
+<h2>Monthly expenses analysis & PowerBI visualization inspired by telda app: </h2>
 
 
 
