@@ -1,6 +1,15 @@
 <h2>Monthly expenses analysis & PowerBI visualization : </h2>
 
-https://github.com/yassinmohamed111/montly_expenses/assets/108435195/de09c732-d368-4f06-93ed-10a004803507
+
+
+
+
+
+https://github.com/yassinmohamed111/montly_expenses/assets/108435195/c99c2b67-8a8e-428f-a675-0fef6b23d2ae
+
+
+
+
 
 
 
