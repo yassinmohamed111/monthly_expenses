@@ -1,7 +1,11 @@
 <h2>Monthly expenses analysis </h2>
 
 <h2>PowerBI visualization :</h2>
+
+
 https://github.com/yassinmohamed111/montly_expenses/assets/108435195/de09c732-d368-4f06-93ed-10a004803507
+
+
 
 <h2>how it works?</h2>
 <h3>1- first you give it your monthly expenses csv file</h3>
